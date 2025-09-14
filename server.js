@@ -1,7 +1,12 @@
 import fs from 'fs';
+import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import Database from 'better-sqlite3';
+import express from 'express';
+import cors from 'cors';
+import jwt from 'jsonwebtoken';
+import bcrypt from 'bcryptjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -20,26 +25,12 @@ if (!fs.existsSync(dbDir)) {
 const db = new Database(DB_PATH);
 console.log(`💾 Banco de dados aberto em: ${DB_PATH}`);
 
-import express from 'express';
-import cors from 'cors';
-import jwt from 'jsonwebtoken';
-import bcrypt from 'bcryptjs';
-import Database from 'better-sqlite3';
-import path from 'path';
-import { fileURLToPath } from 'url';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
 const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
 const JWT_SECRET = process.env.JWT_SECRET || 'troca-por-uma-frase-bem-longa-e-secreta';
-const DB_PATH = process.env.DB_PATH || path.join(__dirname, 'poupanca.db');
-const db = new Database(DB_PATH);
-
 // Inicializa DB
 db.exec(`
 PRAGMA foreign_keys = ON;
