@@ -37,19 +37,22 @@ function setActive(screenId) {
 
 // Auth flow
 async function requireLogin() {
-  $('#loginModal').classList.remove('hidden');
+  const modal = $('#loginModal');
+  modal.classList.remove('hidden');
+  modal.style.display = 'flex';  // ativa só quando realmente precisa
+
   return new Promise(resolve => {
     $('#btnDoLogin').onclick = async () => {
       const email = $('#email').value.trim();
       const senha = $('#senha').value.trim();
       if (!email || !senha) { toast('Preenche email e senha'); return; }
+
       try {
         const user = await login(email, senha);
         state.user = user;
 
-        // 🔴 garante que o modal desapareça de vez
-        $('#loginModal').classList.add('hidden');
-        $('#loginModal').style.display = 'none';
+        modal.classList.add('hidden');
+        modal.style.display = 'none';   // esconde de vez
 
         $('#userName').textContent = user.nome;
         if (user.role === 'admin') $('.nav-admin').classList.remove('hidden');
