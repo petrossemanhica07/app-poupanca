@@ -1,3 +1,25 @@
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import Database from 'better-sqlite3';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Caminho do banco — se não houver variável de ambiente, cria localmente
+const DB_PATH = process.env.DB_PATH || path.join(__dirname, 'poupanca.db');
+
+// Garante que a pasta existe
+const dbDir = path.dirname(DB_PATH);
+if (!fs.existsSync(dbDir)) {
+  fs.mkdirSync(dbDir, { recursive: true });
+  console.log(`📂 Pasta criada: ${dbDir}`);
+}
+
+// Abre (ou cria) o banco
+const db = new Database(DB_PATH);
+console.log(`💾 Banco de dados aberto em: ${DB_PATH}`);
+
 import express from 'express';
 import cors from 'cors';
 import jwt from 'jsonwebtoken';
