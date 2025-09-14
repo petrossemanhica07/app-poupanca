@@ -128,20 +128,22 @@
     <button data-screen="settings"><div class="icon">⚙️</div><span>Config</span></button>
   </nav>
 
-  <!-- Login modal -->
-  <div id="loginModal" style="position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.5);z-index:50;">
-    <div class="card" style="width:min(420px,92vw);">
-      <h3 style="margin:0 0 8px 0;">Entrar</h3>
-      <div class="label">Email</div>
-      <input type="email" id="email" placeholder="admin@local" value="admin@local">
-      <div class="label" style="margin-top:8px;">Senha</div>
-      <input type="password" id="senha" placeholder="admin123" value="admin123">
-      <div class="row" style="margin-top:12px; justify-content:flex-end;">
-        <button id="btnDoLogin">Entrar</button>
-      </div>
-      <div class="hint" style="margin-top:6px;">Dica: admin@local / admin123 (mude depois)</div>
+<!-- Login modal -->
+<div id="loginModal" class="hidden"
+     style="position:fixed;inset:0;align-items:center;justify-content:center;background:rgba(0,0,0,0.5);z-index:50;">
+  <div class="card" style="width:min(420px,92vw);">
+    <h3 style="margin:0 0 8px 0;">Entrar</h3>
+    <div class="label">Email</div>
+    <input type="email" id="email" placeholder="admin@local" value="admin@local">
+    <div class="label" style="margin-top:8px;">Senha</div>
+    <input type="password" id="senha" placeholder="admin123" value="admin123">
+    <div class="row" style="margin-top:12px; justify-content:flex-end;">
+      <button id="btnDoLogin">Entrar</button>
     </div>
+    <div class="hint" style="margin-top:6px;">Dica: admin@local / admin123 (mude depois)</div>
   </div>
+</div>
+
 
   <div id="toast" class="toast hidden"></div>
 
