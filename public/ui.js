@@ -2,7 +2,7 @@ import {
   login, me, getGroups, createGroup, getMembers, addMember,
   createMeeting, listMeetings, closeMeeting,
   createTx, groupBalance, memberBalance,
-  adminOverview, groupReport, clearToken
+  adminOverview, groupReport, clearToken, getToken
 } from './app.js';
 
 // UI helpers
@@ -46,7 +46,11 @@ async function requireLogin() {
       try {
         const user = await login(email, senha);
         state.user = user;
+
+        // 🔴 garante que o modal desapareça de vez
         $('#loginModal').classList.add('hidden');
+        $('#loginModal').style.display = 'none';
+
         $('#userName').textContent = user.nome;
         if (user.role === 'admin') $('.nav-admin').classList.remove('hidden');
         else $('.nav-admin').classList.add('hidden');
@@ -60,7 +64,6 @@ async function requireLogin() {
 
 // Loaders
 async function loadHome() {
-  // Sugestões simples e KPIs do grupo corrente, se houver
   if (!state.currentGroup && state.groups.length) state.currentGroup = state.groups[0];
   if (state.currentGroup) {
     const bal = await groupBalance(state.currentGroup.id);
@@ -238,7 +241,6 @@ function bindEvents() {
   $('#adminGroupSel').addEventListener('change', onAdminGroupChange);
 }
 
-
 // PWA
 function registerSW(){
   if ('serviceWorker' in navigator) {
@@ -250,7 +252,25 @@ function registerSW(){
 window.addEventListener('DOMContentLoaded', async () => {
   bindEvents();
   registerSW();
-  await requireLogin();
+
+  if (getToken()) {
+    const user = await me();
+    if (user) {
+      state.user = user;
+      $('#userName').textContent = user.nome;
+      if (user.role === 'admin') $('.nav-admin').classList.remove('hidden');
+      else $('.nav-admin').classList.add('hidden');
+
+      // 🔴 certifica-se que o modal não fica preso
+      $('#loginModal').classList.add('hidden');
+      $('#loginModal').style.display = 'none';
+    } else {
+      await requireLogin();
+    }
+  } else {
+    await requireLogin();
+  }
+
   state.groups = await getGroups();
   await loadHome();
   await loadGroupsSection();
